@@ -1,0 +1,13 @@
+---
+class: standard
+created: 2026-09-22T04:44:23Z
+id: 1
+priority: medium
+status: backlog
+tags:
+- buildroot
+title: Buildroot external tree skeleton with an i686 no-SSE musl toolchain
+updated: 2026-09-22T04:44:23Z
+---
+
+BR2_EXTERNAL layout, external.mk, Config.in, one qemu_pentium2 defconfig, -march=i686 -mno-sse, static musl, BusyBox init, 686 non-PAE kernel fragment.
