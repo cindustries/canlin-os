@@ -1,0 +1,15 @@
+---
+class: standard
+created: 2026-09-22T04:44:24Z
+id: 3
+priority: low
+status: backlog
+tags:
+- package
+title: CanLin runtime package for Buildroot
+updated: 2026-09-22T19:09:07Z
+---
+
+Blocked on the gnx repo having a buildable core. Package pulls gnx and libbee, builds the rawfb backend, installs the static binary and the base modules.
+
+2026-09-22 19:09 Projekt umbenannt: gnx → CanLin, gnx-os → canlin-os.
