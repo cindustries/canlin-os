@@ -1,0 +1,15 @@
+---
+class: standard
+created: 2026-09-22T04:44:23Z
+id: 2
+priority: medium
+status: backlog
+tags:
+- qemu
+title: QEMU pentium2 test harness (test/)
+updated: 2026-09-23T18:19:37Z
+---
+
+qemu-system-i386 -cpu pentium2 -m 1024 with bzImage + rootfs.cpio, framebuffer, e1000 or rtl8139 NIC, ac97 or sb16 audio; a script that boots and checks the runtime came up.
+
+From canlin#41 (2026-09-23): harness should run canlin's t/net/http_test and t/llm/test_llm_http under qemu-system-i386 -cpu pentium2 and record the TLS handshake time. Until then canlin has only qemu-i386 user-mode evidence.
