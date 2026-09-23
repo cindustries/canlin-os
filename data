@@ -1,0 +1,14 @@
+---
+class: standard
+created: 2026-09-23T18:19:38Z
+id: 4
+priority: medium
+status: backlog
+tags:
+- image
+- net
+title: 'Image: ship /etc/ssl/certs/ca-certificates.crt and /etc/hosts'
+updated: 2026-09-23T18:19:38Z
+---
+
+canlin HTTP transport spec §5 (canlin#41) loads the CA bundle from that default path; missing bundle = every TLS request fails with tls-trust. getaddrinfo also needs /etc/hosts + resolv.conf.
