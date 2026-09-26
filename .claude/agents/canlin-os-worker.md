@@ -2,7 +2,6 @@
 name: canlin-os-worker
 description: "Default canlin-os worker — build and maintain the CanLin operating system images: the Buildroot external tree (Config.in, external.mk, packages for the CanLin runtime and libbee), per-target kernel configs and defconfigs (Pentium II laptop, x86 tablet), the initramfs and boot media (syslinux, UEFI), and the QEMU test harness. Pre-loaded with the CanLin architecture, the family coordination protocol and Getty's git conventions. Leaves a commit-ready tree; never commits — commits belong to the dispatching agent."
 model: inherit
-allowed-tools: Read, Edit, Write, Bash, Glob, Grep
 briefing:
   skills:
     - canlin-core

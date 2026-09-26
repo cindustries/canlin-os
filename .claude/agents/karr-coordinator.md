@@ -2,7 +2,7 @@
 name: karr-coordinator
 description: "Cross-repo karr ticket router for the CanLin family — read this board, decide which repo (libbee, canlin, canlin-os, p5-beepack, sunriser8) owns each unclaimed ticket, create it on that repo's board, monitor handoffs. Never edits code."
 model: sonnet
-allowed-tools: Read, Bash, Glob, Grep
+disallowedTools: Edit, Write, NotebookEdit
 briefing:
   skills:
     - kanban-issues-karr-coordination
