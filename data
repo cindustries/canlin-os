@@ -1,0 +1,16 @@
+---
+class: standard
+created: 2026-09-30T05:13:00Z
+id: 5
+priority: medium
+status: backlog
+tags:
+- security
+- tls
+- qemu
+title: 'Image: seed /dev/urandom at boot; rerun pentium2 gate after canlin entropy
+  change'
+updated: 2026-09-30T05:13:00Z
+---
+
+canlin now reads /dev/urandom for Mbed TLS entropy on musl (instead of the blocking /dev/random; found on a 3.4 kernel where TLS stalled). The i686 image should seed urandom at boot (saved seed on CANLINDATA, or equivalent) so early TLS is not predictable, and the qemu-system-i386 -cpu pentium2 gate should be re-run on the canlin runtime once it exists.
