@@ -56,3 +56,7 @@ buildroot/
 *.cpio
 *.cpio.gz
 bzImage
+
+# skilletor: Config und Ignore-Block committen
+!.claude/skilletor.json
+!.claude/.gitignore
