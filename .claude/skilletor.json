@@ -21,6 +21,9 @@
       "kanban-issues-karr-ticket@karr",
       "canlin-coordination@canlin",
       "canlin-core@canlin"
+    ],
+    "bundles": [
+      "getty-house@getty"
     ]
   },
   "targets": [

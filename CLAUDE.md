@@ -11,7 +11,8 @@ committed); `make qemu` boots the result under `qemu-system-i386 -cpu pentium2 -
 ## Delegation
 
 Delegate behavior-relevant files to the right agent instead of touching them yourself —
-principle and lane are in `.claude/rules/canlin-os-rules.md`.
+principle in the shared house rules (skilletor bundle `getty-house@getty`), lanes in
+`.claude/rules/canlin-os-rules.md`.
 
 | Task | Agent |
 |---|---|
