@@ -29,6 +29,10 @@ BR2_PACKAGE_BUSYBOX=y
 # The init of this tree is its own (board/qemu_pentium2/rootfs-overlay): it
 # starts the runtime and gives a shell. Buildroot's skeleton init is not used.
 BR2_PACKAGE_SKELETON_INIT_NONE=y
+# The trust store of the image: /etc/ssl/certs/ca-certificates.crt (k4). The
+# runtime reads its own bundle too (the canlin card k75), but the image should
+# not ship a system without one.
+BR2_PACKAGE_CA_CERTIFICATES=y
 
 BR2_TARGET_GENERIC_GETTEXT is not set
 BR2_TARGET_GENERIC_HOSTNAME="canlin"
