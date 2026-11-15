@@ -1,0 +1,29 @@
+---
+claimed_at: 2026-11-15T18:13:27Z
+claimed_by: canlin-os-worker
+class: standard
+created: 2026-09-22T04:44:23Z
+id: 1
+priority: medium
+started: 2026-11-14T23:58:37Z
+status: in-progress
+tags:
+- buildroot
+title: Buildroot external tree skeleton with an i686 no-SSE musl toolchain
+updated: 2026-11-15T18:13:27Z
+---
+
+BR2_EXTERNAL-Ausgabe, konkret (Stand 2026-11-15, vierte Sitzung - die vorherigen drei haben die Kernelquellen gelesen und keine Datei geschrieben).
+Dateien (alle neu, im Repo canlin-os):
+1. Config.in - das BR2_EXTERNAL-Menu: menu "CanLin OS" mit bool "CanLin OS" (default y) und je Ziel ein bool, z. B. "QEMU Pentium II" (default y).
+2. external.mk - include $(sort $(wildcard $(BR2_EXTERNAL_CANLIN_OS_PATH)/package/*/*.mk)) und der Eintrag, der das Ziel einhaengt (als Kernel-Fragment und ueber die Target-Paketliste).
+3. configs/qemu_pentium2_defconfig - mindestens: BR2_x86_i686=y; BR2_TOOLCHAIN_BUILDROOT_MUSL=y; BR2_TOOLCHAIN_BUILDROOT_CXX ist nicht gesetzt; BR2_LINUX_KERNEL=y mit CUSTOM_VERSION 7.1.13 (die Version liegt in dl/); BR2_LINUX_KERNEL_DEFCONFIG="i386"; BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES mit dem Pfad zum Fragment; BR2_LINUX_KERNEL_INSTALL_TARGET=y; BR2_TARGET_ROOTFS_CPIO=y; BR2_TARGET_ROOTFS_CPIO_GZIP=y; BR2_PACKAGE_BUSYBOX=y; BR2_TARGET_GENERIC_GETTEXT ist nicht gesetzt; BR2_TARGET_GENERIC_HOSTNAME="canlin"; BR2_TARGET_GENERIC_ISSUE="CanLin"; BR2_TARGET_GENERIC_ROOT_PASSWD="". Dazu das -mno-sse in die Toolchain-CFLAGS (welche Option dieser Buildroot-Version dafuer da ist, entscheidet der Worker und sagt es im Kommentar der Defconfig).
+4. board/qemu_pentium2/linux.fragment - mindestens: CONFIG_BLK_DEV_INITRD=y (das Image ist ein initramfs); CONFIG_SERIAL_8250=y; CONFIG_SERIAL_8250_CONSOLE=y (damit das QEMU-Protokoll etwas sieht); # CONFIG_X86_PAE ist nicht gesetzt (der 1-GB-P2 braucht kein PAE; X86_PAE haengt an X86_HAVE_PAE, und der 686-Kern hat es nicht); # CONFIG_X86_5LEVEL ist nicht gesetzt.
+5. Ein BusyBox-Init: das Board-Overlay (board/qemu_pentium2/rootfs-overlay/etc/init.d/rcS) mountet, startet, was da ist (der Runtime-Binary entsteht gerade im canlin-Repo, Karte k167 dort), und gibt eine Shell.
+DER KERNEL-CONFIG MUSS NICHT VORAB BEKANNT SEIN - DER BUILD IST DIE SCHLEIFE. Schreibe das Fragment nach der Liste oben, starte den Build, und lies die Fehlermeldungen des Kernel-Builds: die sagen dir, welche Option fehlt oder welche nicht geht. Das ist die vorgesehene Schleife und sie ist billiger als jede Recherche. KEINE Recherche in den Kernelquellen (arch/x86/Kconfig, proc.c, defconfigs): die haben drei Sitzungen lang nichts gebracht, und die Karte gibt die Antworten schon vor.
+Abnahme des Boots (das erreichbare Ziel): Das Image bootet unter qemu-system-i386 -cpu pentium2 -m 1024 bis zu einer Shell. Es bootet NICHT bis zur CanLin-Runtime - im canlin-Repo gab es bis heute kein main() in src/ (das wird gerade gebaut, Karte k167 dort) - bis dahin ist die Shell das Ziel. Der Harness (k2) kann gebaut werden, sobald das Image laeuft.
+Arbeitsweise: SCHREIB DIE DATEIEN ZUERST, in deinen ersten Schritten. Jedes Detail, das du nicht sicher weisst, nimm als naheliegende Annahme, schreibe es als Kommentar in die Datei ("ANNAHME: ...") und geh weiter. Baue mit -j8, dl/ und output/ bleiben ausserhalb des Repos, der Build laeuft session-entkoppelt (setsid nohup, Log nach /tmp/canlin-os-k1-build.log), und das Fortschritts-Monitoring filtert Fehler UND Erfolgssignale, damit ein stiller Fehlschlag nicht wie ein gruener Build aussieht.
+
+2026-11-15 (dispatcher): der Baum steht. Die Dateien (external.desc, Config.in, external.mk, configs/qemu_pentium2_defconfig, board/qemu_pentium2/linux.fragment, board/qemu_pentium2/rootfs-overlay/etc/init.d/rcS und /etc/inittab) sind committet als 0e3d3ca. Die Defconfig liest sich so: BR2_x86_i686 (daraus -march=i686, und das aktiviert kein SSE - der P2 hat keines), statisches musl, der eigene Buildroot-Toolchain, Kernel 7.1.13 (die Version liegt in dl/, die Pruefsumme in linux/7.1.13/linux.hash), die i386-Kernel-Defconfig plus das Fragment, das initramfs (cpio+gzip) und das Rootfs-Overlay.
+Zwei Dinge, die die Karte nicht wusste und die jetzt feststehen: Buildroot verlangt eine external.desc (ohne sie bricht der Lauf ab: "does not have an 'external.desc'"), und die Chain bis zur Shell ist: der Kernel bootet das initramfs, Buildroots fs/cpio/init mountet devtmpfs und leitet auf die Konsole um und exect /sbin/init (BusyBox), BusyBox init faehrt /etc/inittab - dort mountet unser sysinit die Pseudo-Dateisysteme, ruft /etc/init.d/rcS und startet ein getty auf der Konsole (das Default-inittab von Busybox hat das getty auskommentiert, deshalb liefert das Overlay ein eigenes inittab).
+Zur Sache: der Baum ist die Arbeit des Dispatchers. Fuenf Sitzungen lang hat der beauftragte Worker die Buildroot- und die Kernelquellen gelesen, ohne eine Datei zu schreiben - die Recherche-Schleife hat die Karte blockiert, und die Karte selbst war vollstaendig spezifiziert. Die Karte bleibt offen, bis das Image unter qemu-system-i386 -cpu pentium2 -m 1024 bis zur Shell bootet; der Build laeuft (Log: /tmp/canlin-os-k1-build.log), und seine Fehlermeldungen sind die Schleife, in der die Optionen nachgezogen werden.
