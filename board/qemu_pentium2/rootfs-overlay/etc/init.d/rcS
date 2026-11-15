@@ -1,0 +1,18 @@
+#!/bin/sh
+# The CanLin init: the pseudo filesystems are up, the runtime starts if the
+# image carries it, and the console gets a shell.
+#
+# The runtime is not in the image yet - the binary is still being written in the
+# canlin repository (its card k167), and the package that carries it into the
+# image is the canlin-os card k3. Until then this image boots to a shell, which
+# is what proves the kernel, the initramfs and the console.
+
+echo "CanLin: the image is up"
+
+if [ -x /usr/bin/canlin ]; then
+    echo "CanLin: starting the runtime"
+    /usr/bin/canlin &
+    sleep 1
+fi
+
+echo "CanLin: ready"

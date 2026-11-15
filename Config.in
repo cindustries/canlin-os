@@ -1,0 +1,19 @@
+menu "CanLin OS"
+
+config BR2_PACKAGE_CANLIN_OS
+	bool "CanLin OS"
+	depends on BR2_i386
+	help
+	  The CanLin images: an initramfs that boots the CanLin runtime.
+	  Every target below is one hardware the images run on.
+
+config BR2_CANLIN_TARGET_QEMU_PENTIUM2
+	bool "QEMU Pentium II"
+	depends on BR2_PACKAGE_CANLIN_OS
+	default y
+	help
+	  The Pentium II laptops (and the QEMU pentium2 profile that stands in
+	  for them): a 686 kernel without PAE, without SSE, and the framebuffer
+	  and the evdev devices of the real machine.
+
+endmenu

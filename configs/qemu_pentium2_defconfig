@@ -1,0 +1,41 @@
+# CanLin OS - the Pentium II target.
+#
+# The image is an initramfs (the whole runtime lives in RAM: the Pentium II
+# laptops have 1 GB and no disk). The kernel is a 686 without PAE, and the
+# toolchain is a static musl for the same architecture.
+#
+# -march=i686 comes from BR2_x86_i686 (arch/Config.in.x86), and it does not
+# enable SSE: the Pentium II has none. The canlin repository's own build adds
+# -march=i686 -mno-sse explicitly, so the target's instruction set is named in
+# both places.
+
+BR2_x86_i686=y
+BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+BR2_TOOLCHAIN_BUILDROOT_CXX is not set
+
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_7_1=y
+
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="7.1.13"
+BR2_LINUX_KERNEL_DEFCONFIG="i386"
+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(BR2_EXTERNAL_CANLIN_OS_PATH)/board/qemu_pentium2/linux.fragment"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+
+BR2_TARGET_ROOTFS_CPIO=y
+BR2_TARGET_ROOTFS_CPIO_GZIP=y
+
+BR2_PACKAGE_BUSYBOX=y
+# The init of this tree is its own (board/qemu_pentium2/rootfs-overlay): it
+# starts the runtime and gives a shell. Buildroot's skeleton init is not used.
+BR2_PACKAGE_SKELETON_INIT_NONE=y
+
+BR2_TARGET_GENERIC_GETTEXT is not set
+BR2_TARGET_GENERIC_HOSTNAME="canlin"
+BR2_TARGET_GENERIC_ISSUE="CanLin"
+BR2_TARGET_GENERIC_ROOT_PASSWD=""
+
+BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_CANLIN_OS_PATH)/board/qemu_pentium2/rootfs-overlay"
+
+BR2_PACKAGE_CANLIN_OS=y
+BR2_CANLIN_TARGET_QEMU_PENTIUM2=y

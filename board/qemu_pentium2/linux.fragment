@@ -1,0 +1,30 @@
+# The Pentium II kernel fragment.
+#
+# The laptops are the Pentium II (Klamath): 1 GB of RAM, no PAE, no SSE, no NX.
+# The kernel starts from an initramfs and talks to the serial console, which is
+# what the QEMU pentium2 profile shows.
+
+# No PAE: the machine has 1 GB, and the 686 kernel without PAE is the target.
+# (X86_PAE depends on X86_HAVE_PAE, and the 686 has it not.)
+# CONFIG_X86_PAE is not set
+# CONFIG_X86_5LEVEL is not set
+# CONFIG_X86_X2APIC is not set
+
+# The image is an initramfs, and the kernel must be able to read it.
+CONFIG_BLK_DEV_INITRD=y
+CONFIG_RD_GZIP=y
+
+# The devices: devtmpfs for /dev (Buildroot's cpio init mounts it), the serial
+# console, and the pseudo filesystems the runtime expects.
+CONFIG_DEVTMPFS=y
+CONFIG_TTY=y
+CONFIG_SERIAL_8250=y
+CONFIG_SERIAL_8250_CONSOLE=y
+CONFIG_SERIAL_8250_CONSOLE_BOTH=y
+CONFIG_UNIX98_PTYS=y
+CONFIG_DEVPTS_FS=y
+CONFIG_TMPFS=y
+CONFIG_PROC_FS=y
+CONFIG_SYSFS=y
+CONFIG_BINFMT_ELF=y
+CONFIG_PRINTK=y
