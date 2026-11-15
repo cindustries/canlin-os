@@ -1,0 +1,21 @@
+---
+claimed_at: 2026-11-15T18:27:21Z
+claimed_by: canlin-os-worker
+class: standard
+created: 2026-09-23T18:19:38Z
+id: 4
+priority: medium
+started: 2026-11-15T18:27:11Z
+status: in-progress
+tags:
+- image
+- net
+title: 'Image: ship /etc/ssl/certs/ca-certificates.crt and /etc/hosts'
+updated: 2026-11-15T18:27:21Z
+---
+
+canlin HTTP transport spec §5 (canlin#41) loads the CA bundle from that default path; missing bundle = every TLS request fails with tls-trust. getaddrinfo also needs /etc/hosts + resolv.conf.
+
+canlin k75: the canlin runtime (APK and images) ships its own CA bundle; use the same source/version here so every target trusts the same roots. Android 4.4's system store lacks ISRG Root X1.
+
+2026-11-15 (dispatcher): die Defconfig traegt jetzt BR2_PACKAGE_CA_CERTIFICATES=y, damit /etc/ssl/certs/ca-certificates.crt im Rootfs liegt (Commit 130bb4d). /etc/hosts braucht nichts - das Skeleton liefert es mit (skeleton-init-common entfernt die Zeile 127.0.1.1). Der Nachbau (defconfig + make) und der Boot mit dem fertigen Image stehen noch aus: der Buildroot-Build aus k1 laeuft noch, danach wird die Defconfig neu angewandt und inkrementell nachgebaut. Die Karte bleibt offen, bis das Image die Datei wirklich zeigt. Wichtig fuer den Schluss: die Karte verlangt, dass Image und Runtime dieselbe Quelle und Version des Bündels benutzen - das eigene Bündel der Runtime kommt mit dem Runtime-Paket (k3) aus der canlin-Karte k75; das System-Bündel hier ist der Trust-Store des Images, nicht das Bündel der Runtime.
