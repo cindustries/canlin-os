@@ -1,0 +1,17 @@
+---
+class: standard
+created: 2026-11-15T17:46:01Z
+id: 6
+priority: high
+status: backlog
+tags:
+- image
+- licences
+- packaging
+title: 'Image: the licence texts of the linked components go into the rootfs'
+updated: 2026-11-15T17:46:01Z
+---
+
+Aus der Release-Pruefung k43 im canlin-Repo (2026-11-15): das Image, das canlin-os baut, muss die Lizenztexte der gelinkten Komponenten mitliefern. docs/THIRD-PARTY.md sagt es fuer jedes Artefakt: "each vendored component keeps its original licence text next to it, and every build or package ships these texts". Im canlin-Repo ist das am APK geprueft und dort fehlt es (Karte k168 dort) - fuer das Image gilt es ebenso, und dort ist es die Karte, die es zuerst loesen muss, weil das Image das erste auslieferbare Artefakt ueberhaupt ist.
+Muster wie bei k4 (dort liegen ca-certificates.crt und /etc/hosts in der rootfs): die Lizenztexte der gelinkten Komponenten kommen in ein Verzeichnis der rootfs, mit einem Verweis darauf, woher sie sind (die Datei im vendorten Baum des canlin-Repos). Der Gegenpart im canlin-Repo ist die gemeinsame Regel, ein licenses/-Verzeichnis zu erzeugen (dort liegt die Karte k168) - das Image sollte es benutzen, nicht seine eigene Liste pflegen.
+Der Font-Subset (src/render/font_builtin.c) ist der heikelste Fall: er ist eingebettet, nennt die SIL OFL in der Name-Table und traegt den Copyright-Hinweis, aber der vollstaendige OFL-Text muss als Datei mitreisen. Ein Reserved Font Name ist nicht benannt, der Name bleibt "Inter".
