@@ -1,0 +1,22 @@
+---
+claimed_at: 2026-11-15T18:38:24Z
+claimed_by: canlin-os-worker
+class: standard
+created: 2026-09-22T04:44:24Z
+id: 3
+priority: low
+started: 2026-11-15T18:37:57Z
+status: in-progress
+tags:
+- package
+title: CanLin runtime package for Buildroot
+updated: 2026-11-15T18:38:24Z
+---
+
+Blocked on the gnx repo having a buildable core. Package pulls gnx and libbee, builds the rawfb backend, installs the static binary and the base modules.
+
+2026-09-22 19:09 Projekt umbenannt: gnx → CanLin, gnx-os → canlin-os.
+
+2026-11-15 (dispatcher): das Paket ist geschrieben, aber noch nicht bewiesen. package/canlin-os/{Config.in,canlin-os.mk} plus board/qemu_pentium2/Config.in und ein neu sortiertes Config.in im Baum (der Baum ist committet, das Paket noch nicht - es wartet auf den Nachweis). Das Paket baut die Runtime aus dem Checkout der canlin-Repositories neben dem Baum (CANLIN_OS_SRC_DIR, Standard: /../canlin); Buildroot rsynct die Quelle, es wird nichts geladen. Gebaut wird mit der Toolchain von Buildroot (TARGET_CROSS), statisch und ohne SSE (-march=i686 -mno-sse -static), das Ergebnis landet als /usr/bin/canlin im Image. Offen sind drei Dinge: (a) der Runtime-Binary-Name und sein Make-Ziel kommen aus der Plattform-Spur (canlin k167, mk/backend.mk nennt CANLIN_BIN := /canlin, das Ziel ist also build/image/canlin beim Aufruf mit BUILD=build/image) - das Paket nimmt an, dass das Ziel so lautet, und muss es nach dem Landen von k167 nachpruefen; (b) die Module des Images: die Basis-Module liegen noch nicht als Dateien im canlin-Repo (der Assistent steckt in src/app/assistant.c), das Paket installiert deshalb nur die Binary; (c) der Nachweis: der Buildroot-Build aus k1 laeuft noch, danach wird die Defconfig neu angewandt (BR2_PACKAGE_CANLIN_OS ist jetzt ein echtes Paket) und das Image neu gebaut - dann zeigt der Boot, ob die Runtime im Image startet. Die Karte bleibt offen, bis das Image die Runtime startet.
+
+2026-11-15 (dispatcher), Ergänzung: im vorigen Eintrag sind zwei Ausdrücke von der Shell gefressen worden (sie standen in doppelten Anführungszeichen). Richtig sind sie so: der Standardpfad der Quelle ist die Variable TOPDIR gefolgt von /../canlin, wobei TOPDIR das Buildroot-Verzeichnis ist; das Make-Ziel der Runtime ist BUILD gefolgt von /canlin, wobei BUILD das Ausgabeverzeichnis des canlin-Builds ist (beim Aufruf mit BUILD=build/image also build/image/canlin). Sonst stimmt der Eintrag.
