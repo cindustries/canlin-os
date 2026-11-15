@@ -1,0 +1,22 @@
+---
+claimed_at: 2026-11-15T18:23:51Z
+claimed_by: canlin-os-worker
+class: standard
+created: 2026-09-22T04:44:23Z
+id: 2
+priority: medium
+started: 2026-11-15T18:23:19Z
+status: review
+tags:
+- qemu
+title: QEMU pentium2 test harness (test/)
+updated: 2026-11-15T18:23:51Z
+---
+
+qemu-system-i386 -cpu pentium2 -m 1024 with bzImage + rootfs.cpio, framebuffer, e1000 or rtl8139 NIC, ac97 or sb16 audio; a script that boots and checks the runtime came up.
+
+From canlin#41 (2026-09-23): harness should run canlin's t/net/http_test and t/llm/test_llm_http under qemu-system-i386 -cpu pentium2 and record the TLS handshake time. Until then canlin has only qemu-i386 user-mode evidence.
+
+2026-11-15 (dispatcher): der Harness steht (test/boot-pentium2.sh, test/README.md, Makefile mit boot-test und qemu). Er bootet das Image unter qemu-system-i386 -cpu pentium2 -m 1024 und prueft bis zum Shell-Prompt; Rueckgabe 0 = bis zur Shell gebootet, sonst 1 mit dem Boot-Log. Der Fehlerpfad ist getestet, der echte Boot wartet auf das Image aus k1. Commit aaaa23a.
+
+2026-11-15 (dispatcher), zur Sache: der Harness ist die Arbeit des Dispatchers. Der canlin-os-Worker gehoert zum canlin-os-Repo und laesst sich aus der canlin-Session nicht ziehen; die letzte Karte hat gezeigt, dass ein Worker ohne das Repo vor sich die Quellen liest statt Dateien zu schreiben. Ein zweiter Versuch haette den Build blockiert, nicht geholfen. Die Karte bleibt offen, bis der echte Boot durch ist.
