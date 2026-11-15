@@ -6,7 +6,8 @@
 ::sysinit:/bin/mount -t proc proc /proc
 ::sysinit:/bin/mount -t sysfs sysfs /sys
 ::sysinit:/bin/mount -t devpts devpts /dev/pts
-::sysinit:/bin/mount -t tmpfs tmpfs /run
+# /run needs no tmpfs: the whole root of this image is an initramfs, so it is
+# RAM anyway.
 null::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
 null::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
 null::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout
