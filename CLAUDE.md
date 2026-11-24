@@ -19,7 +19,7 @@ principle in the shared house rules (skilletor bundle `getty-house@getty`), lane
 | Buildroot tree, packages, defconfigs, kernel fragments, boot media, QEMU harness | `canlin-os-worker` (default) |
 | Route a ticket to canlin, libbee, p5-beepack or sunriser8 | `karr-coordinator` |
 
-The agents carry their skills via `briefing.skills` (see `.claude/agents/`); the main
+The agents carry their skills via `skills:` (see `.claude/agents/`); the main
 agent delegates rather than loading them. Skills `canlin-core` and `canlin-coordination` are
 owned by `~/dev/canlin`; skilletor installs them under `.claude/skills/` from
 `.claude/skilletor.json`, so they change in canlin. Work is tracked on the local `karr` board.
